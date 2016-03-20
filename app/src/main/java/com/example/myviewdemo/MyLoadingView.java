@@ -1,6 +1,7 @@
 package com.example.myviewdemo;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -19,6 +20,9 @@ public class MyLoadingView extends View {
     long sTime;
     long oTime;
     boolean isDown;
+    private int mDownBackground;
+    private int mUpBackground;
+
 
     public MyLoadingView(Context context) {
         super(context);
@@ -27,6 +31,15 @@ public class MyLoadingView extends View {
     public MyLoadingView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mPaint = new Paint();
+        TypedArray typedArray = context.getTheme().
+                obtainStyledAttributes(attrs, R.styleable.MyLoadingView, 0, 0);
+        try {
+            mDownBackground = typedArray.getColor(R.styleable.MyLoadingView_down_background, mDownBackground);
+            mUpBackground = typedArray.getColor(R.styleable.MyLoadingView_up_background, mUpBackground);
+        } finally {
+            typedArray.recycle();
+        }
+
 
     }
 
@@ -37,11 +50,11 @@ public class MyLoadingView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        mPaint.setColor(Color.BLUE);
+        mPaint.setColor(mUpBackground);
         canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), mPaint);
-        Log.d("test", "isDown"+isDown);
+        Log.d("test", "isDown" + isDown);
         if (isDown) {
-            mPaint.setColor(Color.RED);
+            mPaint.setColor(mDownBackground);
             canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), mPaint);
         }
         sTime = System.currentTimeMillis();
@@ -56,7 +69,7 @@ public class MyLoadingView extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Log.d("test", "i am down");
-                 isDown = true ;
+                isDown = true;
                 invalidate();
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -64,7 +77,7 @@ public class MyLoadingView extends View {
                 break;
             case MotionEvent.ACTION_UP:
                 Log.d("test", "i am up");
-                isDown = false ;
+                isDown = false;
                 invalidate();
                 break;
         }

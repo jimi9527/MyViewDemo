@@ -8,6 +8,8 @@
     tools:context="com.example.myviewdemo.MainActivity">
 
     <com.example.myviewdemo.MyLoadingView
+        app:down_background="@color/colorAccent"
+        app:up_background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
